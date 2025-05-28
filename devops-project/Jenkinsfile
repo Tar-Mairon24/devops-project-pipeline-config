@@ -34,7 +34,7 @@ node {
                 sh 'ls -la'
                 echo "Current directory: ${env.WORKSPACE}/CN_api_bk"
                 echo "Building backend in directory: CN_api_bk"
-                sh 'docker build -t backend:${imageVersion} .'
+                sh 'docker build -t tarmairon24/backend:${imageVersion} .'
                 echo "Docker image built with tag: backend:${imageVersion}"
             }
         }
