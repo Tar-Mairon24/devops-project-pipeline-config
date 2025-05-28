@@ -1,11 +1,6 @@
 #!/usr/bin/env groovy
 
 node {
-    stage('checkout') {
-        checkout scm
-        echo "Checking out branch: ${branch}"
-        sh 'ls -la'
-    }
     stage('parameters') {
         branch = env.BRANCH_NAME
         echo "Branch name: ${branch}"
@@ -20,6 +15,11 @@ node {
         sh 'docker --version'
         sh 'docker compose version'
 
+    }
+    stage('checkout') {
+        checkout scm
+        echo "Checking out branch: ${branch}"
+        sh 'ls -la'
     }
     stage('Deploy backend develop') {
         if (branch == 'develop') {
