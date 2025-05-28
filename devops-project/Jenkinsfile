@@ -2,6 +2,7 @@
 
 node {
     stage('parameters') {
+        checkout scm
         branch = env.BRANCH_NAME
         echo "Branch name: ${branch}"
         echo "Git commit: ${env.GIT_COMMIT}"
@@ -18,10 +19,9 @@ node {
     }
     stage('checkout') {
         echo "Checking out branch: ${branch}"
-        checkout scm
         sh 'ls -la'
     }
-    stage('Deploy backend') {
+    stage('Deploy backend develop') {
         if (branch == 'develop') {
             dockerDir = 'docker'
             dir(dockerDir) {
