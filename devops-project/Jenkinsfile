@@ -1,8 +1,14 @@
 #!/usr/bin/env groovy
 
 node {
-    stage('parameters') {
+    def branch
+    stage('checkout') {
+        checkout scm
         branch = env.BRANCH_NAME
+        echo "Checking out branch: ${branch}"
+        sh 'ls -la'
+    }
+    stage('parameters') {
         echo "Branch name: ${branch}"
         echo "Git commit: ${env.GIT_COMMIT}"
         echo "Git commit message: ${env.GIT_COMMIT_MESSAGE}"
@@ -15,11 +21,6 @@ node {
         sh 'docker --version'
         sh 'docker compose version'
 
-    }
-    stage('checkout') {
-        checkout scm
-        echo "Checking out branch: ${branch}"
-        sh 'ls -la'
     }
     stage('Deploy backend develop') {
         if (branch == 'develop') {
