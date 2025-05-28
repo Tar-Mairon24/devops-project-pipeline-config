@@ -26,13 +26,19 @@ node {
         sh 'docker --version'
         sh 'docker compose version'
     }
-    // stage('Build backend image') {
-    //     echo 'Building docker image...'
-    //     if(branch == 'develop' || branch == 'main')
-    //         dir('CN_api_bk') 
-
-    //     }
-    // }
+    stage('Build backend image') {
+        echo 'Building docker image...'
+        def imageVersion = env.Git_COMMIT.take(4
+        if(branch == 'develop' || branch == 'main')
+            dir('CN_api_bk') {
+                sh 'ls -la'
+                echo "Current directory: ${env.WORKSPACE}/CN_api_bk"
+                echo "Building backend in directory: CN_api_bk"
+                sh 'docker build -t backend:${imageVersion} .'
+                echo "Docker image built with tag: backend:${imageVersion}"
+            }
+        }
+    }
     stage('Deploy backend develop') {
         if (branch == 'develop') {
             dockerDir = 'docker'
