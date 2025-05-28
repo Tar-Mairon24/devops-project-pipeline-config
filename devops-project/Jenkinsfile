@@ -3,6 +3,8 @@
 node {
     stage('parameters') {
         checkout scm
+        scm_vars = checkout scm
+        echo scm_vars.get('GIT_COMMIT')
         branch = env.BRANCH_NAME
         echo "Branch name: ${branch}"
         echo "Git commit: ${env.GIT_COMMIT}"
