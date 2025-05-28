@@ -9,6 +9,10 @@ node {
         sh 'ls -la'
     }
     stage('parameters') {
+        env.GIT_COMMIT = sh(script: "git rev-parse HEAD", returnStdout: true).trim()
+        env.GIT_COMMIT_MESSAGE = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+        env.GIT_AUTHOR_NAME = sh(script: "git log -1 --pretty=format:'%an'", returnStdout: true).trim()
+        env.GIT_AUTHOR_EMAIL = sh(script: "git log -1 --pretty=format:'%ae'", returnStdout: true).trim()
         echo "Branch name: ${branch}"
         echo "Git commit: ${env.GIT_COMMIT}"
         echo "Git commit message: ${env.GIT_COMMIT_MESSAGE}"
