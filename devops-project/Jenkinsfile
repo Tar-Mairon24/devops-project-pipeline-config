@@ -42,7 +42,8 @@ node {
     stage('Push backend image') {
         echo 'Pushing docker image to registry...'
         def imageVersion = env.Git_COMMIT.take(4)
-        if (!branch == 'develop' || !branch == 'main') {
+        if (branch ==~ /(?i)^pr.*/) {
+            echo "Pushing Docker image for branch: ${branch}"
             try {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
