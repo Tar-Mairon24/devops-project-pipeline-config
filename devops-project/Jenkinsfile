@@ -35,6 +35,7 @@ node {
                 echo "Current directory: ${env.WORKSPACE}/CN_api_bk"
                 echo "Building backend in directory: CN_api_bk"
                 sh "docker build -t tarmairon24/backend:${imageVersion} ."
+                sh "docker build -t tarmairon24/backend:latest ."
                 echo "Docker image built with tag: backend:${imageVersion}"
             }
         }
@@ -60,15 +61,14 @@ node {
     }
     stage('Deploy backend develop') {
         if (branch == 'develop') {
-            def imageVersion = env.Git_COMMIT.take(4)
             dockerDir = 'docker'
             dir(dockerDir) {
                 sh 'ls -la'
                 echo "Current directory: ${env.WORKSPACE}/${dockerDir}"
                 echo "Building backend in directory: ${dockerDir}"
                 sh 'docker compose -f backend.yml down'
-                sh "BACKEND_IMAGE_TAG=${imageVersion} docker compose -f backend.yml build"
-                sh "BACKEND_IMAGE_TAG=${imageVersion} docker compose -f backend.yml up -d"
+                sh "docker compose -f backend.yml build"
+                sh "docker compose -f backend.yml up -d"
                 echo "Backend deployed successfully for branch: ${branch}"
             }
         } else {
