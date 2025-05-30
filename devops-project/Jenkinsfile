@@ -29,7 +29,7 @@ node {
     stage('Build backend image') {
         echo 'Building docker image...'
         def imageVersion = env.Git_COMMIT.take(4)
-        if (!branch == 'develop' || !branch == 'main') {
+        if (branch ==~ /(?i)^pr.*/) {
             dir('CN_api_bk') {
                 sh 'ls -la'
                 echo "Current directory: ${env.WORKSPACE}/CN_api_bk"
