@@ -60,6 +60,7 @@ node {
     }
     stage('Deploy backend develop') {
         if (branch == 'develop') {
+            def imageVersion = env.Git_COMMIT.take(4)
             dockerDir = 'docker'
             dir(dockerDir) {
                 sh 'ls -la'
