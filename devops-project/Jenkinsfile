@@ -79,7 +79,6 @@ node {
     stage('Deploy backend main') {
         if (branch == 'main') {
             sh 'ls -la'
-            echo "Current directory: ${env.WORKSPACE}/${playbookDir}"
             echo "Running Ansible playbook for backend deployment"
             sh 'ansible-playbook playbooks/backend.yml'
             echo "Backend deployed successfully for branch: ${branch}"
