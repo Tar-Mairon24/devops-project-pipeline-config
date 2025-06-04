@@ -80,18 +80,17 @@ node {
         }
     }
 
-    stage('Deploy backend docker network') {
-        echo 'Deploying backend docker network...'
-        if (branch == 'develop') {
-            sh 'ls -la'
-            sh 'docker network ls'
-            sh 'docker network rm app-network || true'
-            sh 'docker network create app-network'
-            echo "Network deployed successfully for branch: ${branch}"
-        } else {
-            echo "Skipping network deployment for branch: ${branch}"
-        }
-    }
+    // stage('Deploy backend docker network') {
+    //     echo 'Deploying backend docker network...'
+    //     if (branch == 'develop') {
+    //         sh 'ls -la'
+    //         sh 'docker network ls'
+    //         sh 'docker network create app-network'
+    //         echo "Network deployed successfully for branch: ${branch}"
+    //     } else {
+    //         echo "Skipping network deployment for branch: ${branch}"
+    //     }
+    // }
 
     stage('Deploy backend develop') {
         if (branch == 'develop') {
