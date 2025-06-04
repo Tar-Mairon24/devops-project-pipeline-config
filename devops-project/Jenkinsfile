@@ -88,7 +88,13 @@ node {
             def networkExists = sh(script: "docker network ls --filter name=^app-network\$ --format '{{.Name}}'", returnStdout: true).trim()
             if (networkExists == 'app-network') {
                 echo "Network 'app-network' already exists. Removing..."
-                sh 'docker network rm app-network'
+                // Disconnect all containers from the network before removing
+                sh '''
+                for cid in $(docker network inspect app-network -f '{{range .Containers}}{{.Name}} {{end}}'); do
+                  docker network disconnect app-network $cid || true
+                done
+                docker network rm app-network
+                '''
             }
             sh 'docker network create app-network'
             echo "Network deployed successfully for branch: ${branch}"
