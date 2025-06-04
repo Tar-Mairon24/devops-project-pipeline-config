@@ -152,6 +152,7 @@ node {
     stage('Deploy backend main') {
         if (branch == 'main') {
             sh 'ls -la'
+            sh 'ls -la CN_api_bk'
             echo "Running Ansible playbook for backend deployment (main)"
             sh 'ansible-playbook playbooks/backend.yml'
             echo "Backend deployed successfully for branch: ${branch}"
