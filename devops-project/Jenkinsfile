@@ -85,6 +85,7 @@ node {
         if (branch == 'develop') {
             sh 'ls -la'
             sh 'docker network ls'
+            sh 'docker network rm app-network || true'
             sh 'docker network create app-network'
             echo "Network deployed successfully for branch: ${branch}"
         } else {
