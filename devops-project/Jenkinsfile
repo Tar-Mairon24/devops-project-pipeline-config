@@ -114,7 +114,7 @@ node {
         if (branch == 'develop') {
             echo "Installing and configuring PostgreSQL database (develop)..."
             sh 'ls -la'
-            sh 'dockker compose -f postgres.yml down'
+            sh 'docker compose -f postgres.yml down'
             sh 'docker compose -f posgtres.yml build'
             sh 'docker compose -f postgres.yml up -d'
             echo "Database setup complete for branch: ${branch}"   
