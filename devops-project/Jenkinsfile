@@ -113,18 +113,11 @@ node {
     stage('Deploy database develop') {
         if (branch == 'develop') {
             echo "Installing and configuring PostgreSQL database (develop)..."
-            // Instalación y configuración en Ubuntu, ajustar según tu entorno
-            sh '''
-                sudo apt-get update
-                sudo apt-get install -y postgresql postgresql-contrib
-                sudo systemctl start postgresql
-                sudo systemctl enable postgresql
-
-                sudo -u postgres psql -tc "SELECT 1 FROM pg_database WHERE datname = 'mydatabase';" | grep -q 1 || sudo -u postgres createdb mydatabase
-
-                sudo -u postgres psql -d mydatabase -c "CREATE TABLE IF NOT EXISTS users (ID SERIAL PRIMARY KEY, name VARCHAR(30), email VARCHAR(30));"
-            '''
-            echo "Database setup complete for branch: ${branch}"
+            sh 'ls -la'
+            sh 'dockker compose -f postgres.yml down'
+            sh 'docker compose -f posgtres.yml build'
+            sh 'docker compose -f postgres.yml up -d'
+            echo "Database setup complete for branch: ${branch}"   
         } else {
             echo "Skipping database deployment for branch: ${branch}"
         }
@@ -143,33 +136,22 @@ node {
 
     stage('Deploy frontend main') {
         if (branch == 'main') {
-            dockerDir = 'docker'
-            dir(dockerDir) {
-                sh 'ls -la'
-                sh 'docker compose -f frontend.yml down'
-                sh 'docker compose -f frontend.yml build'
-                sh 'docker compose -f frontend.yml up -d'
-                echo "Frontend deployed successfully for branch: ${branch}"
-            }
-        } else {
+            sh 'ls -la'
+            echo "Running Ansible playbook for frontend deployment (main)"
+            sh 'ansible-playbook playbooks/frontend.yml'
+            echo "Backend deployed successfully for branch: ${branch}"
+            } else {
             echo "Skipping frontend deployment for branch: ${branch}"
         }
     }
+    
 
     stage('Deploy database main') {
         if (branch == 'main') {
-            echo "Installing and configuring PostgreSQL database (main)..."
-            sh '''
-                sudo apt-get update
-                sudo apt-get install -y postgresql postgresql-contrib
-                sudo systemctl start postgresql
-                sudo systemctl enable postgresql
-
-                sudo -u postgres psql -tc "SELECT 1 FROM pg_database WHERE datname = 'mydatabase';" | grep -q 1 || sudo -u postgres createdb mydatabase
-
-                sudo -u postgres psql -d mydatabase -c "CREATE TABLE IF NOT EXISTS users (ID SERIAL PRIMARY KEY, name VARCHAR(30), email VARCHAR(30));"
-            '''
-            echo "Database setup complete for branch: ${branch}"
+             sh 'ls -la'
+            echo "Running Ansible playbook for frontend deployment (main)"
+            sh 'ansible-playbook playbooks/postgres.yml'
+            echo "Backend deployed successfully for branch: ${branch}"
         } else {
             echo "Skipping database deployment for branch: ${branch}"
         }
